@@ -1,0 +1,73 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f8ff; /* AliceBlue - a light, friendly color */
+    color: #333;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+    direction: rtl; /* Right-to-left for Arabic */
+}
+
+h1 {
+    color: #ff6347; /* Tomato - a warm, funny color */
+}
+
+#start-button, .answer-button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 5px;
+    cursor: pointer;
+    border-radius: 12px; /* Rounded corners */
+    transition: background-color 0.3s ease;
+}
+
+#start-button:hover, .answer-button:hover {
+    background-color: #45a049; /* Darker green */
+}
+
+#question-container {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #fffacd; /* LemonChiffon - light and playful */
+    border-radius: 8px;
+    min-height: 50px;
+    font-size: 1.2em;
+}
+
+#answers-container {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column; /* Stack answer buttons vertically */
+    align-items: center;
+}
+
+.answer-button {
+    background-color: #1e90ff; /* DodgerBlue */
+    width: 80%; /* Make answer buttons wider */
+    max-width: 400px;
+}
+
+.answer-button:hover {
+    background-color: #1c86ee; /* Darker DodgerBlue */
+}
+
+#result-container {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #e6e6fa; /* Lavender - soft color for results */
+    border-radius: 8px;
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #2e8b57; /* SeaGreen */
+}
+
+/* Hide containers initially */
+#question-container, #answers-container, #result-container {
+    display: none;
+}
