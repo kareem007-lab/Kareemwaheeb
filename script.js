@@ -143,28 +143,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 4. startGame function
     function startGame() {
+        // Step 1: Add Null Check for welcomeMessage (already present, verified)
         if (welcomeMessage) {
-            welcomeMessage.style.display = 'none'; // No animation for these simple elements for now
+            welcomeMessage.style.display = 'none';
         }
         startButton.style.display = 'none';
 
-        // Hide result container
+        // Hide result container from previous game if any
         resultContainer.classList.remove('active');
         hideElementAfterTransition(resultContainer);
 
+        // Step 2: Ensure Content Before Animation (Reordering)
+        // Reset game state
+        currentQuestionIndex = 0;
+        score = 0;
+        
+        // Populate the first question's content
+        displayQuestion(); // Call this first
 
-        // Show question and answers containers
+        // Then set display properties for containers that will be animated
         questionContainer.style.display = 'block';
         answersContainer.style.display = 'flex';
 
-        requestAnimationFrame(() => { // Ensures display is set before class is added for transition
+        // Then trigger animation in the next frame
+        requestAnimationFrame(() => {
             questionContainer.classList.add('active');
             answersContainer.classList.add('active');
         });
-        
-        currentQuestionIndex = 0;
-        score = 0;
-        displayQuestion();
     }
 
     // 5. displayQuestion function
@@ -262,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalQuestions = questions.length;
         const percentage = (finalScore / totalQuestions) * 100;
 
-        if (percentage < 20) return '🤡'; // Very low score
+        if (percentage < 20) return '👎'; // Updated: Very low score
         if (percentage < 40) return '🧐'; // Low score
         if (percentage < 60) return '🤔'; // Medium score
         if (percentage < 80) return '⭐'; // High score
@@ -290,9 +295,10 @@ document.addEventListener('DOMContentLoaded', () => {
             resultIconElement.textContent = resultIcon;
         }
         if (resultTextElement) {
-            resultTextElement.innerHTML = `نصيحة اليوم: ${funnyDescription}<br> درجتك النهائية: ${score} من ${questions.length}`;
+            resultTextElement.innerHTML = `نصيحة اليوم: ${funnyDescription}<br> <strong>درجتك النهائية: ${score} من ${questions.length}</strong>`;
         } else { // Fallback if p#result-text is not there for some reason
-            resultContainer.innerHTML = `<span id="result-icon">${resultIcon}</span> <p id="result-text">نصيحة اليوم: ${funnyDescription}<br> درجتك النهائية: ${score} من ${questions.length}</p>`;
+            // Also apply strong tag in fallback
+            resultContainer.innerHTML = `<span id="result-icon">${resultIcon}</span> <p id="result-text">نصيحة اليوم: ${funnyDescription}<br> <strong>درجتك النهائية: ${score} من ${questions.length}</strong></p>`;
         }
         
         // We can re-enable the start button if they want to play again

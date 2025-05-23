@@ -2,18 +2,22 @@
 
 body {
     font-family: 'Cairo', sans-serif;
-    background-color: #F0F8FF; /* AliceBlue - New Palette */
-    color: #333333; /* Dark Grey - New Palette */
+    background-color: #E9ECEF; /* Light Grey - New Layout Palette */
+    color: #212529; /* Primary Text - Dark Grey/Black - New Layout Palette */
     text-align: center;
-    margin: 0;
-    padding: 20px;
+    margin: 0 auto; /* Center content block if max-width is applied */
+    padding: 40px 20px; /* More padding */
     direction: rtl; /* Right-to-left for Arabic */
+    max-width: 800px; /* Constrain content width */
+    font-size: 17px; /* Base font size */
 }
 
 h1 {
-    color: #FF6347; /* Tomato - New Palette */
+    color: #212529; /* Primary Text Color */
     display: inline-block; /* To allow icon and text to align well */
-    font-weight: 700; /* Make heading bold */
+    font-weight: 700; /* Confirmed */
+    margin-bottom: 30px; /* More margin below title */
+    font-size: 2.2rem; /* Updated */
 }
 
 /* Icon Styling */
@@ -28,53 +32,66 @@ h1 {
 }
 
 
-/* General Button Styling - New Palette */
+/* General Button Styling - Modern Aesthetic */
 #start-button, .answer-button {
-    background-color: #1E90FF; /* DodgerBlue */
-    border: 1px solid #1C86EE; /* Slightly darker DodgerBlue border */
-    color: #FFFFFF; /* White */
-    padding: 15px 32px;
+    background-color: #007BFF; /* New Accent Blue */
+    color: #FFFFFF; /* White text */
+    border: none; /* Remove default border for a flatter look */
+    padding: 18px 25px; /* Existing good padding */
     text-align: center;
     text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    font-weight: 700; /* Make button text bolder */
-    margin: 10px 5px;
+    display: inline-flex; /* For better icon/text alignment */
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem; /* Updated from 16px, now relative to body's 17px */
+    font-weight: 700; /* Confirmed */
+    margin: 10px 5px; /* Existing */
     cursor: pointer;
-    border-radius: 12px; /* Rounded corners */
-    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border-color 0.3s ease; /* Added transform and box-shadow */
+    border-radius: 8px; /* Slightly less rounded than cards */
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease; /* Adjusted transition */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Softer default shadow */
 }
 
 #start-button:hover, .answer-button:hover {
-    background-color: #4682B4; /* SteelBlue */
-    color: #FFFFFF; /* White */
-    border-color: #40729B; /* Slightly darker SteelBlue for hover border */
-    transform: scale(1.05); /* Scale up on hover */
-    box-shadow: 0px 4px 8px rgba(0,0,0,0.2); /* Add shadow on hover */
+    background-color: #0056b3; /* Darker shade of blue for hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Slightly more pronounced shadow on hover */
+    transform: translateY(-2px); /* Slight lift on hover */
 }
 
 #start-button:active, .answer-button:active {
-    transform: scale(0.98); /* Scale down on active */
-    box-shadow: 0px 2px 4px rgba(0,0,0,0.1); /* Slightly reduce shadow on active */
+    background-color: #004085; /* Even darker blue for active */
+    transform: translateY(0px); /* Reset lift */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Reset shadow */
+}
+
+/* Ensure specific .answer-button styles are consistent if they were different from general button */
+.answer-button {
+    width: 80%; 
+    max-width: 400px;
+    /* display: inline-flex, align-items, justify-content are inherited or can be explicitly set if needed */
+    /* padding, font-size, font-weight, margin, cursor, border-radius are inherited */
 }
 
 
 #question-container {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #FFFFFF; /* White - New Palette */
-    border-radius: 8px;
+    padding: 25px; /* Confirmed */
+    background-color: #FFFFFF; /* Confirmed - White card background */
+    border-radius: 12px; /* Updated */
     min-height: 50px;
-    font-size: 1.2em;
-    color: #333333; /* Ensure main text color applies here */
+    font-size: 1.4rem; /* Updated */
+    line-height: 1.6; /* Added */
+    color: #212529; /* Primary text color */
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    margin: 20px 0; /* Adjusted margin */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Added */
+    border: 1px solid #E0E0E0; /* Added */
     /* display: none; will be managed by JS before adding .active */
 }
 
 #answers-container {
-    margin-top: 15px;
+    margin-top: 20px; /* Sufficient margin-top */
     /* display: flex; will be managed by JS before adding .active */
     flex-direction: column; /* Stack answer buttons vertically */
     align-items: center;
@@ -84,25 +101,41 @@ h1 {
 }
 
 .answer-button {
-    /* Specific styles for answer buttons if different from general, otherwise covered by above */
     width: 80%; /* Make answer buttons wider */
     max-width: 400px;
+    padding: 18px 25px; /* Overriding general button padding if needed, or ensure consistency */
+    /* The following are from general button, but repeated here if we want to override specific answer-button display like flex */
+    display: flex; /* Keep flex for icon alignment within answer button */
+    align-items: center; /* Inherited from general button style */
+    justify-content: center; /* Inherited from general button style */
+    line-height: 1.5; /* This was specific to .answer-button before, ensure it's covered or adjusted */
 }
 
-/* No specific hover for .answer-button needed if covered by general button hover, already defined above */
+/* No specific hover for .answer-button needed if general button hover is sufficient */
+/* However, feedback states will override hover below */
 
 #result-container {
-    margin-top: 30px;
-    padding: 20px;
-    background-color: #FFFFFF; /* White - New Palette */
-    border-radius: 8px;
-    font-size: 1.3em;
-    font-weight: bold;
-    color: #333333; /* Main text color - New Palette */
+    padding: 25px; /* Confirmed */
+    background-color: #FFFFFF; /* Confirmed - White card background */
+    border-radius: 12px; /* Updated */
+    font-size: 1.2rem; /* Updated for #result-container itself, will be inherited by p#result-text */
+    line-height: 1.7; /* Added for #result-container, inherited by p#result-text */
+    font-weight: normal; /* Results container itself isn't bold, p#result-text will control its content */
+    font-weight: normal; /* Resetting from previous bold, specific elements like strong will handle boldness */
+    color: #212529; /* Primary text color */
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    margin-top: 30px; /* Good separation */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Added */
+    border: 1px solid #E0E0E0; /* Added */
     /* display: none; will be managed by JS before adding .active */
+}
+
+/* Specific style for result text if needed, inherits from #result-container for now */
+#result-text {
+    /* font-size and line-height will be inherited from #result-container */
+    /* Individual parts (like score) can be made bold using <strong> in HTML */
 }
 
 /* Class to make containers visible with animation */
@@ -111,35 +144,38 @@ h1 {
     transform: translateY(0);
 }
 
-/* Answer Feedback Classes - New Palette */
-.correct-answer {
-    background-color: #90EE90 !important; /* LightGreen */
-    color: #006400 !important; /* DarkGreen */
-    border-color: #006400 !important; /* DarkGreen border */
+/* Answer Feedback Classes - Updated for Modern Aesthetic */
+.correct-answer, .correct-answer:hover { /* Ensure hover on feedback buttons doesn't revert to blue */
+    background-color: #28A745 !important; /* Bootstrap Success Green */
+    color: #FFFFFF !important;
+    /* border: none; is inherited from general button style */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important; /* Consistent shadow */
+    transform: translateY(0px) !important; /* Prevent lift on hover for feedback state */
 }
 
-.incorrect-answer {
-    background-color: #FFB6C1 !important; /* LightPink */
-    color: #8B0000 !important; /* DarkRed */
-    border-color: #8B0000 !important; /* DarkRed border */
+.incorrect-answer, .incorrect-answer:hover { /* Ensure hover on feedback buttons doesn't revert to blue */
+    background-color: #DC3545 !important; /* Bootstrap Danger Red */
+    color: #FFFFFF !important;
+    /* border: none; is inherited from general button style */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important; /* Consistent shadow */
+    transform: translateY(0px) !important; /* Prevent lift on hover for feedback state */
 }
 
-/* Disabled button state */
+/* Disabled button state - Updated */
 .answer-button:disabled {
-    opacity: 0.6;
+    background-color: #6C757D !important; /* Medium Grey for disabled (from palette) */
+    color: #FFFFFF !important; /* Ensure text is readable */
+    opacity: 0.7; /* Adjust opacity */
     cursor: not-allowed;
+    transform: translateY(0) !important; /* No transform on disabled */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important; /* Keep shadow consistent or remove for disabled */
 }
-
-/* Ensure button text with icon aligns well */
-.answer-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1.5; /* Adjust if text with icon wraps weirdly */
+.answer-button:disabled:hover { /* Ensure hover doesn't change disabled appearance */
+    background-color: #6C757D !important; 
+    /* Other properties like transform and box-shadow are already !important in the main disabled rule */
 }
-
 
 /* Hide containers initially using display: none. JS will manage this. */
 #question-container, #answers-container, #result-container {
-    display: none; 
+    display: none; /* Base style, JS handles toggling and .active for animation */
 }
