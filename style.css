@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f8ff; /* AliceBlue - a light, friendly color */
-    color: #333;
+    font-family: 'Cairo', sans-serif;
+    background-color: #F0F8FF; /* AliceBlue - New Palette */
+    color: #333333; /* Dark Grey - New Palette */
     text-align: center;
     margin: 0;
     padding: 20px;
@@ -9,65 +11,135 @@ body {
 }
 
 h1 {
-    color: #ff6347; /* Tomato - a warm, funny color */
+    color: #FF6347; /* Tomato - New Palette */
+    display: inline-block; /* To allow icon and text to align well */
+    font-weight: 700; /* Make heading bold */
 }
 
+/* Icon Styling */
+#title-icon, #result-icon {
+    margin-inline-end: 10px;
+    font-size: 1.5em;
+    vertical-align: middle; /* Align icon with text */
+}
+
+#result-icon {
+    font-size: 2em; /* Make result icon a bit larger */
+}
+
+
+/* General Button Styling - New Palette */
 #start-button, .answer-button {
-    background-color: #4CAF50; /* Green */
-    border: none;
-    color: white;
+    background-color: #1E90FF; /* DodgerBlue */
+    border: 1px solid #1C86EE; /* Slightly darker DodgerBlue border */
+    color: #FFFFFF; /* White */
     padding: 15px 32px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+    font-weight: 700; /* Make button text bolder */
     margin: 10px 5px;
     cursor: pointer;
     border-radius: 12px; /* Rounded corners */
-    transition: background-color 0.3s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border-color 0.3s ease; /* Added transform and box-shadow */
 }
 
 #start-button:hover, .answer-button:hover {
-    background-color: #45a049; /* Darker green */
+    background-color: #4682B4; /* SteelBlue */
+    color: #FFFFFF; /* White */
+    border-color: #40729B; /* Slightly darker SteelBlue for hover border */
+    transform: scale(1.05); /* Scale up on hover */
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.2); /* Add shadow on hover */
 }
+
+#start-button:active, .answer-button:active {
+    transform: scale(0.98); /* Scale down on active */
+    box-shadow: 0px 2px 4px rgba(0,0,0,0.1); /* Slightly reduce shadow on active */
+}
+
 
 #question-container {
     margin-top: 20px;
     padding: 15px;
-    background-color: #fffacd; /* LemonChiffon - light and playful */
+    background-color: #FFFFFF; /* White - New Palette */
     border-radius: 8px;
     min-height: 50px;
     font-size: 1.2em;
+    color: #333333; /* Ensure main text color applies here */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    /* display: none; will be managed by JS before adding .active */
 }
 
 #answers-container {
     margin-top: 15px;
-    display: flex;
+    /* display: flex; will be managed by JS before adding .active */
     flex-direction: column; /* Stack answer buttons vertically */
     align-items: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out 0.1s; /* Slight delay for answers */
 }
 
 .answer-button {
-    background-color: #1e90ff; /* DodgerBlue */
+    /* Specific styles for answer buttons if different from general, otherwise covered by above */
     width: 80%; /* Make answer buttons wider */
     max-width: 400px;
 }
 
-.answer-button:hover {
-    background-color: #1c86ee; /* Darker DodgerBlue */
-}
+/* No specific hover for .answer-button needed if covered by general button hover, already defined above */
 
 #result-container {
     margin-top: 30px;
     padding: 20px;
-    background-color: #e6e6fa; /* Lavender - soft color for results */
+    background-color: #FFFFFF; /* White - New Palette */
     border-radius: 8px;
     font-size: 1.3em;
     font-weight: bold;
-    color: #2e8b57; /* SeaGreen */
+    color: #333333; /* Main text color - New Palette */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    /* display: none; will be managed by JS before adding .active */
 }
 
-/* Hide containers initially */
+/* Class to make containers visible with animation */
+.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Answer Feedback Classes - New Palette */
+.correct-answer {
+    background-color: #90EE90 !important; /* LightGreen */
+    color: #006400 !important; /* DarkGreen */
+    border-color: #006400 !important; /* DarkGreen border */
+}
+
+.incorrect-answer {
+    background-color: #FFB6C1 !important; /* LightPink */
+    color: #8B0000 !important; /* DarkRed */
+    border-color: #8B0000 !important; /* DarkRed border */
+}
+
+/* Disabled button state */
+.answer-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Ensure button text with icon aligns well */
+.answer-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.5; /* Adjust if text with icon wraps weirdly */
+}
+
+
+/* Hide containers initially using display: none. JS will manage this. */
 #question-container, #answers-container, #result-container {
-    display: none;
+    display: none; 
 }

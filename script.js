@@ -4,7 +4,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const questionContainer = document.getElementById('question-container');
     const answersContainer = document.getElementById('answers-container');
     const resultContainer = document.getElementById('result-container');
+    const resultTextElement = document.getElementById('result-text'); // Added for the result text
+    const titleIconElement = document.getElementById('title-icon'); // Added for title icon
+    const resultIconElement = document.getElementById('result-icon'); // Added for result icon
     const welcomeMessage = document.querySelector('h1'); // Assuming the h1 is the welcome message
+
+    // Set Title Icon
+    if (titleIconElement) {
+        titleIconElement.textContent = '💡'; // Lightbulb icon
+    }
+
+    // Helper to handle display none after transition
+    function hideElementAfterTransition(element) {
+        if (!element.classList.contains('active')) { // Only if it's not meant to be active
+            const handleTransitionEnd = (event) => {
+                if (event.target === element && !element.classList.contains('active')) { // Ensure it's the element and still not active
+                    element.style.display = 'none';
+                    element.removeEventListener('transitionend', handleTransitionEnd);
+                }
+            };
+            element.addEventListener('transitionend', handleTransitionEnd);
+            // Fallback if transition doesn't fire (e.g., already opacity 0 or no transition defined)
+            setTimeout(() => {
+                if (!element.classList.contains('active')) {
+                    element.style.display = 'none';
+                }
+            }, 550); // Duration should be slightly longer than CSS transition (0.5s)
+        }
+    }
+
 
     // 2. Question Data Structure
     const questions = [
@@ -116,12 +144,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // 4. startGame function
     function startGame() {
         if (welcomeMessage) {
-            welcomeMessage.style.display = 'none';
+            welcomeMessage.style.display = 'none'; // No animation for these simple elements for now
         }
         startButton.style.display = 'none';
+
+        // Hide result container
+        resultContainer.classList.remove('active');
+        hideElementAfterTransition(resultContainer);
+
+
+        // Show question and answers containers
         questionContainer.style.display = 'block';
-        answersContainer.style.display = 'flex'; // To stack answer buttons
-        resultContainer.style.display = 'none';
+        answersContainer.style.display = 'flex';
+
+        requestAnimationFrame(() => { // Ensures display is set before class is added for transition
+            questionContainer.classList.add('active');
+            answersContainer.classList.add('active');
+        });
+        
         currentQuestionIndex = 0;
         score = 0;
         displayQuestion();
@@ -143,25 +183,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
         shuffledAnswers.forEach(answer => {
             const button = document.createElement('button');
-            button.textContent = answer.text;
+            button.textContent = answer.text; // Original text without icon
             button.classList.add('answer-button');
-            button.addEventListener('click', () => selectAnswer(answer.correct));
+            button.disabled = false; // Ensure buttons are enabled
+            // Store original text for easy revert if needed, though current clear/rebuild handles it
+            button.dataset.originalText = answer.text; 
+            button.addEventListener('click', () => selectAnswer(answer.correct, button, shuffledAnswers));
             answersContainer.appendChild(button);
         });
     }
 
-    // 6. selectAnswer function
-    function selectAnswer(isCorrect) {
+    // 6. selectAnswer function (Updated)
+    function selectAnswer(isCorrect, selectedButton, allAnswerButtonsObjects) {
+        // Disable all answer buttons
+        const answerButtons = answersContainer.querySelectorAll('.answer-button');
+        answerButtons.forEach(btn => {
+            btn.disabled = true;
+        });
+
         if (isCorrect) {
             score++;
+            selectedButton.textContent = selectedButton.dataset.originalText + " ✅";
+            selectedButton.classList.add('correct-answer');
+        } else {
+            selectedButton.textContent = selectedButton.dataset.originalText + " ❌";
+            selectedButton.classList.add('incorrect-answer');
         }
 
-        currentQuestionIndex++;
-        if (currentQuestionIndex < questions.length) {
-            displayQuestion();
-        } else {
-            endGame();
+        // Highlight the correct answer if the user was wrong
+        if (!isCorrect) {
+            allAnswerButtonsObjects.forEach(answerObj => {
+                if (answerObj.correct) {
+                    answerButtons.forEach(btn => {
+                        if (btn.dataset.originalText === answerObj.text) {
+                            btn.classList.add('correct-answer'); // Show what the correct one was
+                            if (!btn.textContent.includes("✅")) { // Avoid double icons if already marked
+                                btn.textContent = btn.dataset.originalText + " ✅";
+                            }
+                        }
+                    });
+                }
+            });
         }
+        
+        // Move to next question or end game after a delay
+        setTimeout(() => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                displayQuestion(); // This will clear classes and textContent
+            } else {
+                endGame();
+            }
+        }, 1500); // Delay to show feedback
     }
 
     // New function: getFunnyDescription
@@ -184,14 +257,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // New function: getFunnyResultIcon
+    function getFunnyResultIcon(finalScore) {
+        const totalQuestions = questions.length;
+        const percentage = (finalScore / totalQuestions) * 100;
+
+        if (percentage < 20) return '🤡'; // Very low score
+        if (percentage < 40) return '🧐'; // Low score
+        if (percentage < 60) return '🤔'; // Medium score
+        if (percentage < 80) return '⭐'; // High score
+        return '🚀'; // Very high score
+    }
+
     // 7. endGame function (Updated)
     function endGame() {
-        questionContainer.style.display = 'none';
-        answersContainer.style.display = 'none';
+        // Hide question and answers containers
+        questionContainer.classList.remove('active');
+        answersContainer.classList.remove('active');
+        hideElementAfterTransition(questionContainer);
+        hideElementAfterTransition(answersContainer);
+
+        // Show result container
         resultContainer.style.display = 'block';
+        requestAnimationFrame(() => { // Ensures display is set before class is added
+            resultContainer.classList.add('active');
+        });
 
         const funnyDescription = getFunnyDescription(score);
-        resultContainer.innerHTML = `نصيحة اليوم: ${funnyDescription}<br> درجتك النهائية: ${score} من ${questions.length}`;
+        const resultIcon = getFunnyResultIcon(score);
+
+        if (resultIconElement) {
+            resultIconElement.textContent = resultIcon;
+        }
+        if (resultTextElement) {
+            resultTextElement.innerHTML = `نصيحة اليوم: ${funnyDescription}<br> درجتك النهائية: ${score} من ${questions.length}`;
+        } else { // Fallback if p#result-text is not there for some reason
+            resultContainer.innerHTML = `<span id="result-icon">${resultIcon}</span> <p id="result-text">نصيحة اليوم: ${funnyDescription}<br> درجتك النهائية: ${score} من ${questions.length}</p>`;
+        }
         
         // We can re-enable the start button if they want to play again
         startButton.textContent = "إعادة اللعب؟";
